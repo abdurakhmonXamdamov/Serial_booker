@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
             setTimeout(()=>{
                 loader.style.display = 'none'
             }, 2000)
-        }, 2000); 
+        }, 1500); 
         
         
 
@@ -59,11 +59,22 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
     function getTimeRemaning(endTime){
 
-        const timer = Date.parse(endTime) - new Date(),
-        days = Math.floor(timer / (24 * 60 * 60 * 1000)),
-        hours = Math.floor((timer / (60 * 60 * 1000))  % 24),
-        minutes = Math.floor((timer / (60 * 1000))  % 60),
-        seconds = Math.floor((timer / 1000)  % 60);
+        let days, hours, minutes, seconds;
+        const timer = Date.parse(endTime) - new Date()
+
+        if(timer <= 0){
+            days = 0,
+            hours = 0,
+            minutes = 0,
+            seconds = 0;
+        }
+        else{
+            days = Math.floor(timer / (24 * 60 * 60 * 1000))
+            hours = Math.floor((timer / (60 * 60 * 1000))  % 24)
+            minutes = Math.floor((timer / (60 * 1000))  % 60)
+            seconds = Math.floor((timer / 1000)  % 60)
+        }
+
 
         return {
             timer, 
@@ -107,5 +118,56 @@ window.addEventListener('DOMContentLoaded', ()=>{
     }
 
     setTime('.timer', deadline)
+
+    // Modal
+
+    function closeModal(){
+        modal.classList.toggle('show')
+        document.body.style.overflow = 'unset'
+    }
+
+    function openModal(){
+        modal.classList.toggle('show')
+        // for making disappear scroll behaivor
+        document.body.style.overflow = 'hidden'
+
+        // for clearing setTimeout function in order to prevent opening modal second time if it is opened by user
+        clearTimeout(openInterval)
+    }
+
+    const modalOpeners = document.querySelectorAll('[data-modal]'),
+        modal = document.querySelector('.modal'),
+        modalClose = document.querySelector('[data-close]');
+
+        modalOpeners.forEach(open =>{
+            open.addEventListener('click', openModal)
+        })
+
+        modalClose.addEventListener('click', closeModal)
+
+        modal.addEventListener('click', (e)=>{
+            if(e.target == modal){
+                closeModal()
+            }
+        })
+
+        document.addEventListener('keydown', (e)=>{
+            if(e.key == 'Escape' && modal.classList.contains('show')){
+                closeModal()
+            }
+        })
+
+    const openInterval = setTimeout(openModal, 4500)
+
+   
+    function showModalScroll(){
+        if(document.documentElement.clientHeight + window.scrollY >= document.documentElement.scrollHeight){
+            openModal()
+            window.removeEventListener('scroll', showModalScroll)
+        }
+    }
+
+    // showModalScroll()
+    window.addEventListener('scroll', showModalScroll);
 
 })
