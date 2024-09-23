@@ -157,7 +157,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
             }
         })
 
-    const openInterval = setTimeout(openModal, 4500)
+    // const openInterval = setTimeout(openModal, 4500)
 
    
     function showModalScroll(){
@@ -169,5 +169,80 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
     // showModalScroll()
     window.addEventListener('scroll', showModalScroll);
+
+
+    // adding Cards by implementing Class's
+
+    class CardMenu{
+        constructor(img, alt, title, text, price, parentCardHolder, ...classEs){
+            this.img = img
+            this.alt = alt
+            this.title = title
+            this.text = text
+            this.price = price
+            this.parentHolder = document.querySelector(parentCardHolder) 
+            this.classEs = classEs
+            this.USD = 12500
+            this.changer() 
+        }
+
+        changer(){
+            this.price = this.price * this.USD;
+        }
+
+        render(){
+            const elDiv = document.createElement('div')
+            
+            this.classEs.forEach(classs =>{
+                elDiv.classList.add(classs)
+            })
+
+            elDiv.innerHTML = `
+                    <img src=${this.img} alt=${this.alt} />
+                    <h3 class="menu__item-subtitle">${this.title}</h3>
+                    <div class="menu__item-descr">
+                    ${this.text}
+                    </div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                    <div class="menu__item-cost">Price:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> Uzs/month</div>
+                    </div>
+                `
+            this.parentHolder.append(elDiv);
+        }
+    }
+
+    new CardMenu(
+            "../img/Tabs/1.png",
+            "vegy",
+            'Plan “Usual”',
+            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditate beatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.',
+            10, 
+            '.menu .container',
+            "menu__item"
+        ).render()
+
+    new CardMenu(
+            "../img/Tabs/2.jpg",
+            "elite",
+            'Plan “Premium”',
+            ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque aliquid molestiae, sit eveniet, tempora ipsum quaerat recusandae sapiente doloremque corporis dolores quas consectetur ut labore distinctio libero reiciendis harum sequi?',
+            15, 
+            '.menu .container',
+            "menu__item"
+        ).render()
+
+    new CardMenu(
+            "../img/Tabs/3.jpg",
+            "post",
+            'Plan "VIP"',
+            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatibus natus nobis minus corporis atque enim vitae, modi eligendi commodi itaque voluptatum ipsum. Nemo reiciendis, id rem dolorum rerum consequuntur eos.',
+            20, 
+            '.menu .container',
+            "menu__item"
+        ).render()
+
+
 
 })
