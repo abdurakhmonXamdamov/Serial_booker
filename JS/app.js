@@ -122,31 +122,29 @@ window.addEventListener('DOMContentLoaded', ()=>{
     // Modal
 
     function closeModal(){
-        modal.classList.toggle('show')
+        modal.classList.remove('show')
+        modal.classList.add('hide')
         document.body.style.overflow = 'unset'
     }
 
     function openModal(){
-        modal.classList.toggle('show')
+        modal.classList.add('show')
+        modal.classList.remove('hide')
         // for making disappear scroll behaivor
         document.body.style.overflow = 'hidden'
-
         // for clearing setTimeout function in order to prevent opening modal second time if it is opened by user
         clearTimeout(openInterval)
     }
 
     const modalOpeners = document.querySelectorAll('[data-modal]'),
-        modal = document.querySelector('.modal'),
-        modalClose = document.querySelector('[data-close]');
+        modal = document.querySelector('.modal')
 
         modalOpeners.forEach(open =>{
             open.addEventListener('click', openModal)
         })
 
-        modalClose.addEventListener('click', closeModal)
-
         modal.addEventListener('click', (e)=>{
-            if(e.target == modal){
+            if(e.target == modal || e.target.getAttribute('data-close') == ''){
                 closeModal()
             }
         })
@@ -157,7 +155,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
             }
         })
 
-    // const openInterval = setTimeout(openModal, 4500)
+    const openInterval = setTimeout(openModal, 4500)
 
    
     function showModalScroll(){
@@ -243,6 +241,87 @@ window.addEventListener('DOMContentLoaded', ()=>{
             "menu__item"
         ).render()
 
+        // Form 
+
+        const form = document.querySelectorAll('form')
+
+        form.forEach((items)=>{
+            postData(items)
+        })
+
+        const msg = {
+            loading: '../img/spinner.svg',
+            success: 'Thanks for filling our Form',
+            failure: 'Something went Wrong'
+        }
 
 
+        function postData(form){
+            form.addEventListener('submit', (e)=>{
+                e.preventDefault();
+
+                const submitting = document.createElement('img')
+                submitting.src = msg.loading;
+                submitting.style.cssText = `
+                    display: block;
+                    margin: 0 auto;
+                `
+                form.append(submitting)
+
+                const inputs = form.querySelectorAll('input'),
+                    obj = {};
+
+                inputs.forEach((input)=>{
+                    obj[input.getAttribute('name')] = input.value;
+                })
+
+                fetch('../server.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    },
+                    body: JSON.stringify(obj)
+                })
+                .then(data => data.json())
+                .then((res)=>{
+                    console.log(res);
+                    showThansModal(msg.success)
+                    submitting.remove();
+                })
+                .catch(()=>{
+                    showThansModal(msg.failure)
+                })
+                .finally(()=>{
+                    form.reset();
+                })
+                
+            })
+        }
+
+            // Response Modal
+
+            function showThansModal(message){
+            const prevModal = document.querySelector('.modal__dialog')
+            prevModal.classList.add('hide')
+            openModal()
+
+            const responseMod = document.createElement('div')
+            responseMod.classList.add('modal__dialog')
+
+            responseMod.innerHTML = `
+                    <div class="modal__content">
+                    <div data-close class="modal__close">&times;</div>
+                    <div class="modal__title">
+                        ${message}
+                    </div>
+                    </div>
+            `
+            document.querySelector('.modal').append(responseMod)
+            setTimeout(() => {
+                responseMod.remove()
+                prevModal.classList.add('show')
+                prevModal.classList.remove('hide')
+                closeModal()
+            }, 3500);
+        }
 })
