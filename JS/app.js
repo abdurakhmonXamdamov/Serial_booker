@@ -190,10 +190,15 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
         render(){
             const elDiv = document.createElement('div')
-            
-            this.classEs.forEach(classs =>{
-                elDiv.classList.add(classs)
-            })
+
+            if(this.classEs.length == 0){
+                this.elDiv = 'menu__item'
+                elDiv.classList.add(this.elDiv)
+            }else{
+                this.classEs.forEach(className =>{
+                    elDiv.classList.add(className)
+                })
+            }
 
             elDiv.innerHTML = `
                     <img src=${this.img} alt=${this.alt} />
@@ -211,42 +216,23 @@ window.addEventListener('DOMContentLoaded', ()=>{
         }
     }
 
-    new CardMenu(
-            "../img/Tabs/1.png",
-            "vegy",
-            'Plan “Usual”',
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditate beatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.',
-            10, 
-            '.menu .container',
-            "menu__item"
-        ).render()
+    async function getResource(url){
+        const res = await fetch(url)
+        return await res.json()
+    }
 
-    new CardMenu(
-            "../img/Tabs/2.jpg",
-            "elite",
-            'Plan “Premium”',
-            ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque aliquid molestiae, sit eveniet, tempora ipsum quaerat recusandae sapiente doloremque corporis dolores quas consectetur ut labore distinctio libero reiciendis harum sequi?',
-            15, 
-            '.menu .container',
-            "menu__item"
-        ).render()
-
-    new CardMenu(
-            "../img/Tabs/3.jpg",
-            "post",
-            'Plan "VIP"',
-            'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatibus natus nobis minus corporis atque enim vitae, modi eligendi commodi itaque voluptatum ipsum. Nemo reiciendis, id rem dolorum rerum consequuntur eos.',
-            20, 
-            '.menu .container',
-            "menu__item"
-        ).render()
+    getResource('http://localhost:3000/menu').then(data =>{
+        data.forEach(({img, altimg, title, desc, price}) =>{
+            new CardMenu(img, altimg, title, desc, price, ".menu .container").render()
+        })
+    })
 
         // Form 
 
         const form = document.querySelectorAll('form')
 
         form.forEach((items)=>{
-            postData(items)
+            bindData(items)
         })
 
         const msg = {
@@ -255,73 +241,78 @@ window.addEventListener('DOMContentLoaded', ()=>{
             failure: 'Something went Wrong'
         }
 
+    async function postData(url, data){
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: data
+        })
 
-        function postData(form){
-            form.addEventListener('submit', (e)=>{
-                e.preventDefault();
+        return res.json();
+    }
 
-                const submitting = document.createElement('img')
-                submitting.src = msg.loading;
-                submitting.style.cssText = `
-                    display: block;
-                    margin: 0 auto;
-                `
-                form.append(submitting)
 
-                const inputs = form.querySelectorAll('input'),
-                    obj = {};
+    function bindData(form){
+        form.addEventListener('submit', (e)=>{
+            e.preventDefault();
 
-                inputs.forEach((input)=>{
-                    obj[input.getAttribute('name')] = input.value;
-                })
-
-                fetch('../server.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json; charset=UTF-8'
-                    },
-                    body: JSON.stringify(obj)
-                })
-                .then(data => data.json())
-                .then((res)=>{
-                    console.log(res);
-                    showThansModal(msg.success)
-                    submitting.remove();
-                })
-                .catch(()=>{
-                    showThansModal(msg.failure)
-                })
-                .finally(()=>{
-                    form.reset();
-                })
-                
-            })
-        }
-
-            // Response Modal
-
-            function showThansModal(message){
-            const prevModal = document.querySelector('.modal__dialog')
-            prevModal.classList.add('hide')
-            openModal()
-
-            const responseMod = document.createElement('div')
-            responseMod.classList.add('modal__dialog')
-
-            responseMod.innerHTML = `
-                    <div class="modal__content">
-                    <div data-close class="modal__close">&times;</div>
-                    <div class="modal__title">
-                        ${message}
-                    </div>
-                    </div>
+            const submitting = document.createElement('img')
+            submitting.src = msg.loading;
+            submitting.style.cssText = `
+                display: block;
+                margin: 0 auto;
             `
-            document.querySelector('.modal').append(responseMod)
-            setTimeout(() => {
-                responseMod.remove()
-                prevModal.classList.add('show')
-                prevModal.classList.remove('hide')
-                closeModal()
-            }, 3500);
-        }
+            form.append(submitting)
+
+            const inputs = form.querySelectorAll('input'),
+                obj = {};
+
+            inputs.forEach((input)=>{
+                obj[input.getAttribute('name')] = input.value;
+            })
+
+            postData('http://localhost:3000/request', JSON.stringify(obj))
+            .then((res)=>{
+                console.log(res);
+                showThansModal(msg.success)
+                submitting.remove();
+            })
+            .catch(()=>{
+                showThansModal(msg.failure)
+            })
+            .finally(()=>{
+                form.reset();
+            })
+            
+        })
+    }
+
+        // Response Modal
+
+    function showThansModal(message){
+        const prevModal = document.querySelector('.modal__dialog')
+        prevModal.classList.add('hide')
+        openModal()
+
+        const responseMod = document.createElement('div')
+        responseMod.classList.add('modal__dialog')
+
+        responseMod.innerHTML = `
+                <div class="modal__content">
+                <div data-close class="modal__close">&times;</div>
+                <div class="modal__title">
+                    ${message}
+                </div>
+                </div>
+        `
+        document.querySelector('.modal').append(responseMod)
+        setTimeout(() => {
+            responseMod.remove()
+            prevModal.classList.add('show')
+            prevModal.classList.remove('hide')
+            closeModal()
+        }, 3500);
+    }
 })

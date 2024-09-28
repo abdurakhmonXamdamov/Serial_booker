@@ -1,0 +1,45 @@
+{
+  "menu": [
+    {
+      "img": "../img/Tabs/1.png",
+      "altimg": "vegy",
+      "title": "Plan “Usual”",
+      "desc": " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditate beatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
+      "price": 10,
+      "id": "39e3"
+    },
+    {
+      "img": "../img/Tabs/2.jpg",
+      "altimg": "elite",
+      "title": "Plan “Premium”",
+      "desc": " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditate beatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
+      "price": 20,
+      "id": "f68d"
+    },
+    {
+      "img": "../img/Tabs/3.jpg",
+      "altimg": "post",
+      "title": "Plan “VIP”",
+      "desc": " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit nesciunt facere, sequi exercitationem praesentium ab cupiditate beatae debitis perspiciatis itaque quaerat id modi corporis delectus ratione nobis harum voluptatum in.",
+      "price": 30,
+      "id": "3e97"
+    }
+  ],
+  "request": [
+    {
+      "id": "90a3",
+      "name": "adyuva",
+      "phone": "900717205"
+    },
+    {
+      "id": "0955",
+      "name": "Muhammad Ali",
+      "phone": "881301757"
+    },
+    {
+      "id": "d059",
+      "name": "Alisher",
+      "phone": "910393454"
+    }
+  ]
+}

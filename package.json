@@ -1,0 +1,14 @@
+{
+  "name": "strongjs",
+  "version": "1.0.0",
+  "description": "\"Mini project called Ticket seller website\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "It's me Abdurahmon",
+  "license": "ISC",
+  "devDependencies": {
+    "json-server": "^1.0.0-beta.3"
+  }
+}
