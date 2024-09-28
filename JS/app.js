@@ -1,3 +1,5 @@
+// const { default: axios } = require("axios")
+
 window.addEventListener('DOMContentLoaded', ()=>{
 
     const tabheaderParent = document.querySelector('.tabheader__items'),
@@ -216,16 +218,26 @@ window.addEventListener('DOMContentLoaded', ()=>{
         }
     }
 
-    async function getResource(url){
-        const res = await fetch(url)
-        return await res.json()
-    }
+    //* Axios code
 
-    getResource('http://localhost:3000/menu').then(data =>{
-        data.forEach(({img, altimg, title, desc, price}) =>{
-            new CardMenu(img, altimg, title, desc, price, ".menu .container").render()
-        })
+    axios.get('http://localhost:3000/menu').then((data)=>{
+        data.data.forEach(({img, altimg, title, desc, price}) =>{
+                new CardMenu(img, altimg, title, desc, price, ".menu .container").render()
+            })
     })
+
+    //* This is the same as above code I just try to do it with axios third library. 
+
+    // async function getResource(url){
+    //     const res = await fetch(url)
+    //     return await res.json()
+    // }
+
+    // getResource('http://localhost:3000/menu').then(data =>{
+    //     data.forEach(({img, altimg, title, desc, price}) =>{
+    //         new CardMenu(img, altimg, title, desc, price, ".menu .container").render()
+    //     })
+    // })
 
         // Form 
 
