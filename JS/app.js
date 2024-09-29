@@ -157,7 +157,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
             }
         })
 
-    const openInterval = setTimeout(openModal, 4500)
+    const openInterval = setTimeout(openModal, 4000)
 
    
     function showModalScroll(){
@@ -327,4 +327,83 @@ window.addEventListener('DOMContentLoaded', ()=>{
             closeModal()
         }, 3500);
     }
+
+    // Carousel Slider
+
+    const slides = document.querySelectorAll('.offer__slide'),
+        right = document.querySelector('.offer__slider-next'),
+        left = document.querySelector('.offer__slider-prev'),
+        current = document.getElementById('current'),
+        total = document.getElementById('total'),
+        sliderWrapper = document.querySelector('.offer__slider-wrapper'),
+        sliderInner = document.querySelector('.offer__slider-inner'),
+        width = parseInt(window.getComputedStyle(sliderWrapper).width)
+
+        let slideIdx = 1
+        let calcSlider = 0
+
+        sliderInner.style.width = 100 * slides.length + '%';
+        sliderInner.style.display = 'flex'
+        sliderWrapper.style.overflow = 'hidden'
+        sliderInner.style.transition = '.4s ease all'
+
+        slides.forEach(slide =>{
+            slide.style.width = width + 'px';
+        })
+
+        if(slides.length < 10){
+            total.textContent = `0${slides.length}`
+            current.textContent = `0${slideIdx}`
+        }else{
+            total.textContent = slides.length;
+            current.textContent = slideIdx
+        }
+
+        right.addEventListener('click', ()=>{
+            if(calcSlider == width * (slides.length - 1)){
+                calcSlider = 0
+            }else{
+                calcSlider += width
+            }
+
+            sliderInner.style.transform = `translateX(-${calcSlider}px)`
+
+            if(slideIdx == slides.length){
+                slideIdx = 1
+            }else{
+                slideIdx++
+            }
+
+            if(slides.length < 10){
+                current.textContent = `0${slideIdx}`
+            }else{
+                current.textContent = slideIdx
+            }
+        })
+
+        left.addEventListener('click', ()=>{
+            if(calcSlider == 0){
+                calcSlider = width * (slides.length - 1)
+            }else{
+                calcSlider -= width
+            }
+
+            sliderInner.style.transform = `translateX(-${calcSlider}px)`
+
+            if(slideIdx == 1){
+                slideIdx = slides.length
+            }else{
+                slideIdx--
+            }
+
+            if(slides.length < 10){
+                current.textContent = `0${slideIdx}`
+            }else{
+                current.textContent = slideIdx
+            }
+        })
+
+
+
+
 })
