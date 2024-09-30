@@ -337,7 +337,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
         total = document.getElementById('total'),
         sliderWrapper = document.querySelector('.offer__slider-wrapper'),
         sliderInner = document.querySelector('.offer__slider-inner'),
-        width = parseInt(window.getComputedStyle(sliderWrapper).width)
+        width = parseInt(window.getComputedStyle(sliderWrapper).width),
+        parentSlider = document.querySelector('.offer__slider');
 
         let slideIdx = 1
         let calcSlider = 0
@@ -357,6 +358,21 @@ window.addEventListener('DOMContentLoaded', ()=>{
         }else{
             total.textContent = slides.length;
             current.textContent = slideIdx
+        }
+
+        const indicator = document.createElement('ol')
+        indicator.classList.add('caroules-indicator')
+        parentSlider.append(indicator)
+        
+        const dotsMassive = []
+
+        for(let i = 0; i<slides.length; i++){
+            const dots = document.createElement('li')
+            dots.setAttribute('data-slide', i + 1)
+            dots.className = 'caroules-dots'
+            indicator.append(dots)
+            dotsMassive.push(dots)
+            if(i == 0) dots.style.opacity = '1'
         }
 
         right.addEventListener('click', ()=>{
@@ -379,6 +395,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
             }else{
                 current.textContent = slideIdx
             }
+
+            dotsMassive.forEach(dot => dot.style.opacity = '.5')
+            dotsMassive[slideIdx-1].style.opacity = '1'
         })
 
         left.addEventListener('click', ()=>{
@@ -401,9 +420,28 @@ window.addEventListener('DOMContentLoaded', ()=>{
             }else{
                 current.textContent = slideIdx
             }
+
+            dotsMassive.forEach(dot => dot.style.opacity = '.5')
+            dotsMassive[slideIdx-1].style.opacity = '1'
         })
 
+        dotsMassive.forEach(data =>{
+            data.addEventListener('click', (e)=>{
+                const slideTo = e.target.getAttribute('data-slide')
 
-
+                slideIdx = slideTo;
+                calcSlider = width * (slideTo - 1)
+                sliderInner.style.transform = `translateX(-${calcSlider}px)`
+                
+                if(slides.length < 10){
+                    current.textContent = `0${slideIdx}`
+                }else{
+                    current.textContent = slideIdx
+                }
+                
+                dotsMassive.forEach(dot => dot.style.opacity = '.5')
+                dotsMassive[slideIdx-1].style.opacity = '1'
+            })
+        })
 
 })

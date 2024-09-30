@@ -815,3 +815,33 @@ section {
     opacity: 1;
   }
 }
+
+.caroules-indicator{
+  position: relative;
+  right: 0;
+  left: 0;
+  bottom: 50px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin:  0 auto;
+}
+
+.caroules-dots{
+  flex: 0 1 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 3px;
+  margin-left: 3px;
+  cursor: pointer;
+  background-color: #fff;
+  background-clip: padding-box;
+  box-sizing: border-box;
+  opacity: .5;
+  transition: opacity .5s ease;
+}
+
+
+
