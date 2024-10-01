@@ -9,7 +9,9 @@
   "author": "It's me Abdurahmon",
   "license": "ISC",
   "devDependencies": {
-    "json-server": "^1.0.0-beta.3"
+    "json-server": "^1.0.0-beta.3",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "axios": "^1.7.7"
